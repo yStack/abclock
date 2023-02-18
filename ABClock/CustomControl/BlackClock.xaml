@@ -24,13 +24,13 @@
             <Rectangle Grid.Column="1" Grid.ColumnSpan="2" RadiusX="2.5" RadiusY="2.5" HorizontalAlignment="Left" Width="185" Height="5" Fill="#C89600"></Rectangle>
         </Grid>
     </UserControl.Resources>
-    <Grid x:Name="ClockGrid"  MaxHeight="400" MaxWidth="400" Width="{Binding ClockWidth}" Height="{Binding ClockWidth}">
+    <Grid x:Name="ClockGrid" MaxHeight="400" MaxWidth="400" Width="{Binding ClockWidth}" Height="{Binding ClockWidth}">
         <!--外部阴影-->
         <Grid.Effect>
             <DropShadowEffect Color="#000000" Opacity="0.1" BlurRadius="10" ShadowDepth="15" Direction="320"/>
         </Grid.Effect>
 
-        <Border  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="15">
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="15">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <LinearGradientBrush.GradientStops>

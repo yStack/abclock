@@ -35,12 +35,6 @@ namespace ABClock
         }
         #endregion
 
-        public BlackClock()
-        {
-            InitializeComponent();
-            DataContext = this;
-        }
-
         private Rectangle _hourPointer = new Rectangle();
         private Rectangle _minutePointer = new Rectangle();
         private Grid _secondPointer = new Grid();
@@ -49,6 +43,7 @@ namespace ABClock
         private RotateTransform _hourRotation = new RotateTransform();
         private RotateTransform _minuteRotation = new RotateTransform();
         private RotateTransform _secondRotation = new RotateTransform();
+        private double _canvasWidth;
 
         public readonly DependencyProperty ClockWidthProperty =
         DependencyProperty.Register("ClockWidth", typeof(double), typeof(UserControl), new PropertyMetadata(400.0));
@@ -93,6 +88,15 @@ namespace ABClock
             }
         }
 
+
+        public BlackClock()
+        {
+            InitializeComponent();
+            AddElementToCanvas();
+            DataContext = this;
+        }
+
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             Init();
@@ -100,7 +104,7 @@ namespace ABClock
         }
 
 
-        private void Init()
+        private void AddElementToCanvas()
         {
             _hourPointer = (Rectangle)FindResource("HourPointer");
             _minutePointer = (Rectangle)FindResource("MinutePointer");
@@ -109,25 +113,30 @@ namespace ABClock
             ClockPanel.Children.Add(_hourPointer);
             ClockPanel.Children.Add(_minutePointer);
             ClockPanel.Children.Add(_secondPointer);
+        }
 
+
+        private void Init()
+        {
+            _canvasWidth = ClockPanel.ActualWidth;
             _centerX = ClockPanel.ActualHeight / 2;
             _centerY = ClockPanel.ActualWidth / 2;
 
-            Canvas.SetLeft(_hourPointer, _centerX - _hourPointer.Height / 2);
-            Canvas.SetTop(_hourPointer, _centerY - _hourPointer.Height / 2);
+            Canvas.SetLeft(_hourPointer, _centerX - _hourPointer.ActualHeight / 2);
+            Canvas.SetTop(_hourPointer, _centerY - _hourPointer.ActualHeight / 2);
 
-            Canvas.SetLeft(_minutePointer, _centerX - _minutePointer.Height / 2);
-            Canvas.SetTop(_minutePointer, _centerY - _minutePointer.Height / 2);
+            Canvas.SetLeft(_minutePointer, _centerX - _minutePointer.ActualHeight / 2);
+            Canvas.SetTop(_minutePointer, _centerY - _minutePointer.ActualHeight / 2);
 
             Canvas.SetLeft(_secondPointer, _centerX - 30);
             Canvas.SetTop(_secondPointer, _centerY - 20);
 
-            HourRotation.CenterX = 7.5;
-            HourRotation.CenterY = 7.5;
-            MinuteRotation.CenterX = 7.5;
-            MinuteRotation.CenterY = 7.5;
-            SecondRotation.CenterX = 30;
-            SecondRotation.CenterY = 20;
+            HourRotation.CenterX = _hourPointer.ActualHeight / 2;
+            HourRotation.CenterY = _hourPointer.ActualHeight / 2;
+            MinuteRotation.CenterX = _minutePointer.ActualHeight / 2;
+            MinuteRotation.CenterY = _minutePointer.ActualHeight / 2;
+            SecondRotation.CenterX = _secondPointer.Height / 2 + 10;
+            SecondRotation.CenterY = _secondPointer.Height / 2;
 
             GenTickMark();
             GenLabelMark();
@@ -138,14 +147,15 @@ namespace ABClock
         {
             string now = DateTime.Now.ToString("hh:mm:ss");
             string[] timeInfo = now.Split(":");
-            int hour = int.Parse(timeInfo[0]);
-            int minute = int.Parse(timeInfo[1]);
-            int second = int.Parse(timeInfo[2]);
+            double hour = double.Parse(timeInfo[0]);
+            double minute = double.Parse(timeInfo[1]);
+            double second = double.Parse(timeInfo[2]);
 
-            HourRotation.Angle = 360 / 12 * hour - 90;
-            MinuteRotation.Angle = 360 / 60 * minute - 90;
-            SecondRotation.Angle = 360 / 60 * second - 90;
+            HourRotation.Angle = Math.Round(360 / 12 * (hour + minute / 60) - 90, 2);
+            MinuteRotation.Angle = Math.Round(360 / 60 * (minute + second / 60) - 90);
+            SecondRotation.Angle = Math.Round(360 / 60 * second - 90);
         }
+
 
 
         private void GenTickMark()
@@ -163,8 +173,8 @@ namespace ABClock
                 ClockPanel.Children.Add(rect);
 
                 int offset = 2; //留空
-                Canvas.SetLeft(rect, 340 - rect.Width - offset);
-                Canvas.SetTop(rect, 340 / 2 - rect.Height / 2);
+                Canvas.SetLeft(rect, _canvasWidth - rect.Width - offset);
+                Canvas.SetTop(rect, _canvasWidth / 2 - rect.Height / 2);
 
                 RotateTransform rt = new RotateTransform();
                 rt.CenterX = -(_centerX - rect.Width - offset);
@@ -194,8 +204,8 @@ namespace ABClock
                 ClockPanel.Children.Add(label);
 
                 double offset = 15; //留空
-                Canvas.SetLeft(label, 340 - label.Width - offset);
-                Canvas.SetTop(label, 340 / 2 - label.Height / 2);
+                Canvas.SetLeft(label, _canvasWidth - label.Width - offset);
+                Canvas.SetTop(label, _canvasWidth / 2 - label.Height / 2);
 
                 RotateTransform rt = new RotateTransform();
                 rt.CenterX = -(_centerX - label.Width - offset);
@@ -226,6 +236,5 @@ namespace ABClock
             });
         }
 
-    
     }
 }
