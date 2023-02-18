@@ -44,9 +44,17 @@ namespace ABClock
         private RotateTransform _minuteRotation = new RotateTransform();
         private RotateTransform _secondRotation = new RotateTransform();
         private double _canvasWidth;
+        private double _outterCircleDiameter;
+        private double _mostOutterCircleDiameter = 380.0;
 
         public readonly DependencyProperty ClockWidthProperty =
         DependencyProperty.Register("ClockWidth", typeof(double), typeof(UserControl), new PropertyMetadata(400.0));
+
+        public readonly DependencyProperty InnerCircleDiameterProperty =
+        DependencyProperty.Register("InnerCircleDiameter", typeof(double), typeof(UserControl), new PropertyMetadata(340.0));
+
+        public readonly DependencyProperty DiameterOffsetProperty =
+        DependencyProperty.Register("DiameterOffset", typeof(double), typeof(UserControl), new PropertyMetadata(30.0));
 
 
         public double ClockWidth
@@ -54,6 +62,54 @@ namespace ABClock
             get { return (double)GetValue(ClockWidthProperty); }
             set { SetValue(ClockWidthProperty, value); }
         }
+
+
+        public double InnerCircleDiameter
+        {
+            get { return (double)GetValue(InnerCircleDiameterProperty); }
+            set { SetValue(InnerCircleDiameterProperty, value); }
+        }
+
+
+        public double DiameterOffset
+        {
+            get { return (double)GetValue(DiameterOffsetProperty); }
+            set
+            {
+                SetValue(DiameterOffsetProperty, value);
+                OutterCircleDiameter = InnerCircleDiameter + value;
+                MostOutterCircleDiameter = OutterCircleDiameter + 10;
+            }
+        }
+
+
+        public double OutterCircleDiameter
+        {
+            get { return _outterCircleDiameter; }
+            set
+            {
+                if (_outterCircleDiameter != value)
+                {
+                    _outterCircleDiameter = value;
+                    OnPropertyChanged(nameof(OutterCircleDiameter));
+                }
+            }
+        }
+
+
+        public double MostOutterCircleDiameter
+        {
+            get { return _outterCircleDiameter; }
+            set
+            {
+                if (_mostOutterCircleDiameter != value)
+                {
+                    _mostOutterCircleDiameter = value;
+                    OnPropertyChanged(nameof(MostOutterCircleDiameter));
+                }
+            }
+        }
+
 
 
         public RotateTransform HourRotation
@@ -106,6 +162,8 @@ namespace ABClock
 
         private void AddElementToCanvas()
         {
+            DiameterOffset = 30;
+
             _hourPointer = (Rectangle)FindResource("HourPointer");
             _minutePointer = (Rectangle)FindResource("MinutePointer");
             _secondPointer = (Grid)FindResource("SecondPointer");
@@ -217,6 +275,7 @@ namespace ABClock
         }
 
 
+
         private void StartUpdate()
         {
             Task.Run(() =>
@@ -230,7 +289,7 @@ namespace ABClock
                     }
                     catch (Exception ex)
                     {
-
+                        Console.WriteLine(ex.Message);
                     }
                 }
             });

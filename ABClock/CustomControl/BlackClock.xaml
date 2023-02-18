@@ -11,7 +11,7 @@
         <converter:ValueAddConverter x:Key="ValueAddConverter"/>
         <converter:ValueMultiConverter x:Key="ValueMultiConverter"/>
 
-        <Rectangle x:Key="HourPointer" Width="145" Height="15" Fill="#C4C3C3" RenderTransform="{Binding HourRotation}"  RadiusX="10" RadiusY="10"/>
+        <Rectangle x:Key="HourPointer" Width="145" Height="15" Fill="#C4C3C3" RenderTransform="{Binding HourRotation}"  RadiusX="7.5" RadiusY="7.5"/>
         <Rectangle x:Key="MinutePointer"  Width="165" Height="15" RenderTransform="{Binding MinuteRotation}" Fill="#C4C3C3" RadiusX="10" RadiusY="10"/>
         <Grid Panel.ZIndex="1" x:Name="SecGrid" x:Key="SecondPointer" Width="200" Height="40" RenderTransform="{Binding SecondRotation}">
             <Grid.ColumnDefinitions>
@@ -47,34 +47,34 @@
 
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                 <!--外部描边-->
-                <Ellipse Width="370"
-                         Height="370" 
+                <Ellipse Width="{Binding OutterCircleDiameter}"
+                         Height="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualWidth}"
                          StrokeThickness="1" Opacity="0.1" Margin="0" Stroke="White">
                 </Ellipse>
 
                 <!--外圆外阴影-->
-                <Ellipse Width="380"
-                         Height="380">
+                <Ellipse Width="{Binding MostOutterCircleDiameter}"
+                         Height="{Binding MostOutterCircleDiameter}">
                     <Ellipse.Effect>
                         <BlurEffect Radius="7"></BlurEffect>
                     </Ellipse.Effect>
                 </Ellipse>
 
                 <!--外圆-->
-                <Ellipse Width="370"
-                         Height="370"
+                <Ellipse Width="{Binding OutterCircleDiameter}"
+                         Height="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualWidth}"
                          x:Name="OuterCircle" Opacity="0.5" Fill="#2D2D2D"></Ellipse>
 
                 <!--内圆-->
                 <Ellipse x:Name="InnerCircle" 
-                         Width="340"
-                         Height="340" 
+                         Width="{Binding InnerCircleDiameter}"
+                         Height="{Binding InnerCircleDiameter}" 
                          Opacity="1" Fill="#141414">
                 </Ellipse>
 
                 <!--内圆内阴影-->
-                <Ellipse Width="340"
-                         Height="340" 
+                <Ellipse Width="{Binding InnerCircleDiameter}"
+                         Height="{Binding InnerCircleDiameter}"
                          StrokeThickness="1" Opacity="0.18" Stroke="#010101">
                     <Ellipse.Effect>
                         <BlurEffect Radius="6"></BlurEffect>
@@ -82,8 +82,8 @@
                 </Ellipse>
 
                 <Canvas
-                    Width="340"
-                    Height="340" 
+                    Width="{Binding InnerCircleDiameter}"
+                    Height="{Binding InnerCircleDiameter}" 
                     x:Name="ClockPanel" Background="Transparent"/>
             </Grid>
         </Border>

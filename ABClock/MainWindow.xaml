@@ -50,6 +50,6 @@
         <StackPanel ClipToBounds="True" Panel.ZIndex="1" x:Name="MiniTitleBar" Orientation="Horizontal" Width="{Binding ElementName=Clock, Path=ActualWidth}" Height="25" Grid.Row="0" HorizontalAlignment="Right" FlowDirection="RightToLeft" VerticalAlignment="Top">
             <Button ClipToBounds="True" x:Name="CloseButton" Click="CloseButton_Click" HorizontalAlignment="Right" Style="{StaticResource CloseBtnStyle}"></Button>
         </StackPanel>
-        <local:BlackClock Grid.Row="0" Grid.RowSpan="2"/>
+        <local:BlackClock x:Name="Clock" Grid.Row="0" Grid.RowSpan="2"/>
     </Grid>
 </Window>
